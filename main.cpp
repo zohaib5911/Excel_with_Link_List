@@ -1,12 +1,13 @@
 #include <iostream>
 #include <string>
-#include "cell.h"
+#include "spreadSheet.h"
 using namespace std;
 
 int main(){
 
-    Cell obj(4,3,2);
+    SpreadSheet<int> obj(5,5);
     cout<<obj;
+
 
     return 0;
 }
