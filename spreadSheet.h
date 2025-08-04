@@ -31,20 +31,60 @@ public:
          head = grid[0][0];
     }
 
-    friend ostream& operator<<(ostream& os, const SpreadSheet& obj) {
-    Cell<T>* row_ptr = obj.head;
-    while (row_ptr != nullptr) {
-        Cell<T>* col_ptr = row_ptr;
-        while (col_ptr != nullptr) {
-            os << col_ptr->value << "\t"; 
-            col_ptr = col_ptr->right;
-        }
-        os << endl;
-        row_ptr = row_ptr->down;
+    void setValue(int row, int col, T value) {
+    Cell<T>* temp = head;
+    for (int i = 0; i < row && temp; ++i) {
+        temp = temp->down;
     }
-    return os;
-}
+    for (int j = 0; j < col && temp; ++j) {
+        temp = temp->right;
+    }
+    if (temp) {
+        temp->value = value;
+    }
+    }
 
+    T getValue(int row,int col){
+        Cell<T> * temp = head;
+        for(int i = 0; i < row; i++){
+            temp = temp->down;
+        }
+        for(int j = 0; j < col; j++){
+            temp = temp->right;
+        }
+        if(temp){
+            return temp->value;
+        }
+        else {
+            return T{};
+        }
+    }
+
+    friend ostream& operator<<(ostream& os, const SpreadSheet& obj) {
+        Cell<T>* row_ptr = obj.head;
+        while (row_ptr != nullptr) {
+            Cell<T>* col_ptr = row_ptr;
+            while (col_ptr != nullptr) {
+                os << col_ptr->value << "\t"; 
+                col_ptr = col_ptr->right;
+            }
+            os << endl;
+            row_ptr = row_ptr->down;
+        }
+        return os;
+    }
+    ~SpreadSheet() {
+        Cell<T>* row_ptr = head;
+        while (row_ptr) {
+            Cell<T>* col_ptr = row_ptr;
+            row_ptr = row_ptr->down;
+            while (col_ptr) {
+                Cell<T>* next_col = col_ptr->right;
+                delete col_ptr;
+                col_ptr = next_col;
+            }
+        }
+    }
 
 };
 
