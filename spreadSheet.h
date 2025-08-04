@@ -10,6 +10,7 @@ template <typename T>
 class SpreadSheet{
     int rows,columns;
     Cell<T>* head;
+    
 public:
     SpreadSheet(int r,int col):rows(r),columns(col),head(nullptr){
        if(rows == 0 || columns == 0) return;
@@ -32,16 +33,16 @@ public:
     }
 
     void setValue(int row, int col, T value) {
-    Cell<T>* temp = head;
-    for (int i = 0; i < row && temp; ++i) {
-        temp = temp->down;
-    }
-    for (int j = 0; j < col && temp; ++j) {
-        temp = temp->right;
-    }
-    if (temp) {
-        temp->value = value;
-    }
+        Cell<T>* temp = head;
+        for (int i = 0; i < row && temp; ++i) {
+            temp = temp->down;
+        }
+        for (int j = 0; j < col && temp; ++j) {
+            temp = temp->right;
+        }
+        if (temp) {
+            temp->value = value;
+        }
     }
 
     T getValue(int row,int col){
@@ -57,6 +58,24 @@ public:
         }
         else {
             return T{};
+        }
+    }
+
+    void insertRow(int r){
+        for(int i=0;i<columns;i++){
+            T val;
+            cout<<"Enter Value at ["<<r<<"]["<<i<<"]"<<" : ";
+            cin>>val;
+            setValue(r,i,val);
+        }
+    }
+
+    void insertCol(int col){
+        for(int i=0;i<rows;i++){
+            T val;
+            cout<<"Enter Value at ["<<i<<"]["<<col<<"]"<<" : ";
+            cin>>val;
+            setValue(i,col,val);
         }
     }
 
