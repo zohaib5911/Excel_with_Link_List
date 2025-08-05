@@ -1,77 +1,37 @@
-📊 **Mini Excel Spreadsheet using Linked List (C++)**
-A simple C++ console-based spreadsheet system that mimics Excel functionalities using a 2D linked list data structure. Each cell supports integer values and basic arithmetic formulas.
+# 📊 Mini Excel Spreadsheet using Linked List (C++)
 
-🧠 Features
-Create a grid-based spreadsheet (default 5x5)
+A simple C++ console-based spreadsheet system that mimics Excel functionalities using a 2D linked list data structure. Each cell supports integer values and basic arithmetic formulas, with dependency tracking and auto-recalculation.
 
-Set individual cell values
+---
 
-Set cell values using formulas (e.g. A1 = B3 + C2)
+## 🧠 Features
 
-Add rows and columns dynamically
+- **Grid-based Spreadsheet:** Create a spreadsheet of any size (default 5x5, customizable).
+- **Set Cell Value:** Assign integer values to any cell by row/column or Excel-style notation (e.g., A1).
+- **Set Cell Formula:** Use formulas like `A1 = B3 + C2`, supporting `+`, `-`, `*`, `/` operators.
+- **Dependency Tracking:** Automatically track and update dependent cells when referenced cells change.
+- **Recalculation:** All formula-based cells are recalculated on any update.
+- **Add Row/Column:** Dynamically add rows or columns to the spreadsheet.
+- **Insert Values into Row/Column:** Fill an entire row or column with user input.
+- **Display Sheet:** Print the spreadsheet in a tabular format with row and column headers.
+- **User-friendly CLI Menu:** Simple menu-driven interface for all operations.
+- **Safe Memory Management:** Custom destructor to free all allocated memory.
 
-Insert values into entire row or column
+---
 
-Empty entire row or column
+## 🧪 Example Formula
 
-Recalculate dependent formula-based cells automatically
-
-Find:
-
-Row-wise Max/Min
-
-Column-wise Max/Min
-
-User-friendly CLI menu
-
-🔧 Technologies
-Language: C++
-
-Compiler: g++ (MinGW or any C++14+ supported compiler)
-
-📁 File Structure
-bash
-Copy
-Edit
-├── main.cpp             # Main user interface
-├── spreadSheet.h        # Spreadsheet class (template)
-├── cell.h               # Definition of the Cell<T> node
-🧪 Sample Formula
 You can set cell formulas like:
+A1 = B3 + C2 A2 = D3 * E4
 
-ini
-Copy
-Edit
-A1 = B3 + C2
-A2 = D3 * E4
-And the spreadsheet will:
+The spreadsheet will:
+- Automatically evaluate the expression
+- Track dependencies
+- Recalculate on value updates
 
-Automatically evaluate the expression
+---
 
-Track dependencies
 
-Recalculate on value updates
-
-🚀 How to Run
-Clone or Download this repository.
-
-Compile using any C++ compiler:
-
-bash
-Copy
-Edit
-g++ main.cpp -o sheet
-Run the executable:
-
-bash
-Copy
-Edit
-./sheet      # On Linux/Mac
-sheet.exe    # On Windows
-🎯 Demo Output
-mathematica
-Copy
-Edit
 =========== Mini Excel ===========
 1. Display Sheet
 2. Set Cell Value
@@ -79,12 +39,14 @@ Edit
 4. Add Row
 5. Add Column
 ...
-Enter choice: 
+Enter choice:
+
+
 📌 Future Improvements
 Support for saving and loading sheets from files
-
-Add more formula complexity (e.g., nested formulas)
-
+Add more formula complexity (e.g., nested formulas, parentheses)
 GUI support using Qt or ImGui
-
 Sorting row or column based on values
+Support for different data types (string, float, etc.)
+Undo/Redo functionality
+Import/Export to CSV or Excel formats
