@@ -34,6 +34,13 @@ public:
         }
          head = grid[0][0];
     }
+        
+    void recalculate(){
+        for(auto& i : dependTracker){
+             signOperator(i.r, i.t1, i.t2, i.op);
+        }
+    } 
+
     void setValue(string target,string t1,string t2){
         int row_1 =  target[0] - 'a';
         int col_1 = target[1] - '0';
@@ -45,13 +52,9 @@ public:
         cout<<row_2<<" _ "<<col_2<<endl;
         cout<<row_3<<" _ "<<col_3<<endl;
         setValue(row_1,col_1,row_2,col_2,row_3,col_3);
+        recalculate();
     }   
 
-    void recalculate(){
-        for(auto& i : dependTracker){
-             signOperator(i.r, i.t1, i.t2, i.op);
-        }
-    } 
     void setValue(int row_1,int col_1,int row_2,int col_2,int row_3,int col_3){
         Cell<T>* r = getCell(row_1,col_1);
         Cell<T>* t1 = getCell(row_2,col_2);
@@ -62,6 +65,7 @@ public:
             cin>>op;
             dependTracker.push_back({r, t1, t2, op});
             signOperator(r,t1,t2,op);
+            recalculate();
         }
     }
     void setValue(int row, int col, T value) {
@@ -74,6 +78,7 @@ public:
         }
         if (temp) {
             temp->value = value;
+            recalculate();
         }
     }
 
