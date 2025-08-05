@@ -35,40 +35,24 @@ public:
          head = grid[0][0];
     }
         
-    void recalculate(){
-        for(auto& i : dependTracker){
-             signOperator(i.r, i.t1, i.t2, i.op);
-        }
-    } 
 
-    void setValue(string target,string t1,string t2){
-        int row_1 =  target[0] - 'a';
-        int col_1 = target[1] - '0';
-        int row_2 = t1[0] - 'a';
-        int col_2 = t1[1] - '0';
-        int row_3 = t2[0] - 'a';
-        int col_3 = t2[1] - '0';
-        cout<<row_1<<" _ "<<col_1<<endl;
-        cout<<row_2<<" _ "<<col_2<<endl;
-        cout<<row_3<<" _ "<<col_3<<endl;
-        setValue(row_1,col_1,row_2,col_2,row_3,col_3);
-        recalculate();
-    }   
-
-    void setValue(int row_1,int col_1,int row_2,int col_2,int row_3,int col_3){
-        Cell<T>* r = getCell(row_1,col_1);
-        Cell<T>* t1 = getCell(row_2,col_2);
-        Cell<T>* t2 = getCell(row_3,col_3);
-        if(r && t1 && t2){
-            char op;
-            cout<<"Enter sign (*,/,+,-) : ";
-            cin>>op;
-            dependTracker.push_back({r, t1, t2, op});
-            signOperator(r,t1,t2,op);
-            recalculate();
+    void setCell() {
+        string str;
+        cout << "Enter in this format only : (A1=A2+A3): ";
+        getline(cin, str);
+        if (str.length() < 6 || str[2] != '=') {
+            cout << "Invalid format!" << endl;
+            return;
         }
+        string resultCell = str.substr(0, 2);    // A1
+        char op = str[5];                        // +, -, *, /
+        string term1 = str.substr(3, 2);         // A2
+        string term2 = str.substr(6, 2);         // A3
+        strToRC(resultCell, term1, term2, op);  // Call your custom function
     }
-    void setValue(int row, int col, T value) {
+
+
+    void setCell(int row, int col, T value) {
         Cell<T>* temp = head;
         for (int i = 0; i < row && temp; ++i) {
             temp = temp->down;
@@ -79,6 +63,7 @@ public:
         if (temp) {
             temp->value = value;
             recalculate();
+            cout<<"\nUpdating.......\n";
         }
     }
 
@@ -117,18 +102,30 @@ public:
     }
 
     friend ostream& operator<<(ostream& os, const SpreadSheet& obj) {
+        cout << "\n------- Spread Sheet -------\n";
+        os << "\t";
+        for (int col = 0; col < obj.columns; col++) {
+            os << static_cast<char>('A' + col) << "\t";
+        }
+        os << endl;
+
         Cell<T>* row_ptr = obj.head;
+        int row = 0;
         while (row_ptr != nullptr) {
+            os << row << "\t";  
             Cell<T>* col_ptr = row_ptr;
             while (col_ptr != nullptr) {
-                os << col_ptr->value << "\t"; 
+                os << col_ptr->value << "\t";
                 col_ptr = col_ptr->right;
             }
             os << endl;
             row_ptr = row_ptr->down;
+            row++;
         }
-        return os;
+    return os;
     }
+
+
     ~SpreadSheet() {
         Cell<T>* row_ptr = head;
         while (row_ptr) {
@@ -143,7 +140,27 @@ public:
     }
 
 private :
-        void signOperator(Cell<T>* r,Cell<T>* t1,Cell<T>* t2,char op){
+
+    Cell<T>* getCell(int row,int col){
+        Cell<T>* temp = head;
+        for(int i=0;i<row;i++)  temp = temp->down;
+        for(int i=0;i<col;i++)  temp = temp->right;
+        return temp;
+    }
+      
+    void putValue(int row_1,int col_1,int row_2,int col_2,int row_3,int col_3,char op){
+        Cell<T>* r = getCell(row_1,col_1);
+        Cell<T>* t1 = getCell(row_2,col_2);
+        Cell<T>* t2 = getCell(row_3,col_3);
+        if(r && t1 && t2){
+            dependTracker.push_back({r, t1, t2, op});
+            cout<<"\nUpdating.......\n";            
+            signOperator(r,t1,t2,op);
+            recalculate();
+        }
+    }
+
+    void signOperator(Cell<T>* r,Cell<T>* t1,Cell<T>* t2,char op){
         switch (op)
             {
             case '+' : r->value = t1->value + t2->value;    break;
@@ -162,12 +179,21 @@ private :
             }
     }
 
-    Cell<T>* getCell(int row,int col){
-        Cell<T>* temp = head;
-        for(int i=0;i<row;i++)  temp = temp->down;
-        for(int i=0;i<col;i++)  temp = temp->right;
-        return temp;
-    }
+    void strToRC(string target,string t1,string t2,char op){
+        int col_1 =  target[0] - 'A';
+        int row_1 = target[1] - '0';
+        int col_2 = t1[0] - 'A';
+        int row_2 = t1[1] - '0';
+        int col_3 = t2[0] - 'A';
+        int row_3 = t2[1] - '0';
+        putValue(row_1,col_1,row_2,col_2,row_3,col_3,op);
+    }   
+
+    void recalculate(){
+        for(auto& i : dependTracker){
+             signOperator(i.r, i.t1, i.t2, i.op);
+        }
+    } 
 
 };
 
