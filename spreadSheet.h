@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <limits>   // to use numaric limits
 #include "cell.h"
 
 using namespace std;
@@ -35,6 +36,42 @@ public:
          head = grid[0][0];
     }
         
+    void addRow() {
+        Cell<T>* lastRow = head;
+        while (lastRow->down != nullptr) {
+            lastRow = lastRow->down;
+        }
+        Cell<T>* newRowHead = new Cell<T>(0, rows, 0);
+        Cell<T>* currentNew = newRowHead;
+
+        for (int j = 1; j < columns; ++j) {
+            Cell<T>* newCell = new Cell<T>(0, rows, j);
+            currentNew->right = newCell;
+            currentNew = newCell;
+        }
+        Cell<T>* above = lastRow;
+        currentNew = newRowHead;
+
+        while (above != nullptr && currentNew != nullptr) {
+            above->down = currentNew;
+            above = above->right;
+            currentNew = currentNew->right;
+        }
+        rows++;
+    }
+    void addColumn() {
+        Cell<T>* row = head;
+        while (row != nullptr) {
+            Cell<T>* colPtr = row;
+            while (colPtr->right != nullptr) {
+                colPtr = colPtr->right;
+            }
+            Cell<T>* newCell = new Cell<T>(0, colPtr->row, columns); 
+            colPtr->right = newCell;
+            row = row->down;
+        }
+        columns++;
+    }
 
     void setCell() {
         string str;
@@ -63,7 +100,6 @@ public:
         if (temp) {
             temp->value = value;
             recalculate();
-            cout<<"\nUpdating.......\n";
         }
     }
 
@@ -88,7 +124,7 @@ public:
             T val;
             cout<<"Enter Value at ["<<r<<"]["<<i<<"]"<<" : ";
             cin>>val;
-            setValue(r,i,val);
+            setCell(r,i,val);
         }
     }
 
@@ -97,8 +133,55 @@ public:
             T val;
             cout<<"Enter Value at ["<<i<<"]["<<col<<"]"<<" : ";
             cin>>val;
-            setValue(i,col,val);
+            setCell(i,col,val);
         }
+    }
+    T rowMax(int row){
+        if(row>rows || head==nullptr){ return T(); }
+        T m = numeric_limits<T>::min();;
+        Cell<T>* temp = head;
+        for(int i=0;i<row;i++) temp=temp->down;
+        for(int i=0;i<columns;i++){
+            m=max(temp->value,m);
+            temp=temp->right;
+        }
+        return m;
+    }
+
+    T rowMin(int row){
+        if(row>rows || head==nullptr){ return T(); }
+        T m = numeric_limits<T>::max();
+        Cell<T>* temp = head;
+        for(int i=0;i<row;i++) temp=temp->down;
+        for(int i=0;i<columns;i++){
+            m=min(temp->value,m);
+            temp=temp->right;
+        }
+        return m;
+    }
+
+    T colMax(int col){
+        if(col>columns || head==nullptr){ return T(); }
+        T m = numeric_limits<T>::min();
+        Cell<T>* temp = head;
+        for(int i=0;i<col;i++) temp=temp->right;
+        for(int i=0;i<rows;i++){
+            m=max(temp->value,m);
+            temp=temp->down;
+        }
+        return m;
+    }
+
+    int colMin(int col){
+        if(col>columns || head==nullptr){ return T(); }
+        T m = numeric_limits<T>::max();
+        Cell<T>* temp = head;
+        for(int i=0;i<col;i++) temp=temp->right;
+        for(int i=0;i<rows;i++){
+            m=min(temp->value,m);
+            temp=temp->down;
+        }
+        return m;
     }
 
     friend ostream& operator<<(ostream& os, const SpreadSheet& obj) {
@@ -125,6 +208,24 @@ public:
     return os;
     }
 
+    
+
+    void emptyRow(int row){
+        Cell<T>* temp = head;
+        for(int i=0;i<row;i++) temp=temp->down;
+        for(int i=0;i<columns;i++){
+            temp->value=0;
+            temp=temp->right;
+        }
+    }
+    void emptycol(int col){
+        Cell<T>* temp = head;
+        for(int i=0;i<col;i++) temp=temp->right;
+        for(int i=0;i<rows;i++){
+            temp->value=0;
+            temp=temp->down;
+        }
+    }    
 
     ~SpreadSheet() {
         Cell<T>* row_ptr = head;
@@ -154,7 +255,6 @@ private :
         Cell<T>* t2 = getCell(row_3,col_3);
         if(r && t1 && t2){
             dependTracker.push_back({r, t1, t2, op});
-            cout<<"\nUpdating.......\n";            
             signOperator(r,t1,t2,op);
             recalculate();
         }
