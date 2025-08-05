@@ -2,13 +2,17 @@
 #define SPREADSHEAT_H
 #include <iostream>
 #include <string>
+#include <vector>
 #include "cell.h"
 
 using namespace std;
+template<typename T>
+struct dependency;
 
 template <typename T>
 class SpreadSheet{
     int rows,columns;
+    vector<dependency<T>> dependTracker;
     Cell<T>* head;
 public:
     SpreadSheet(int r,int col):rows(r),columns(col),head(nullptr){
@@ -30,12 +34,6 @@ public:
         }
          head = grid[0][0];
     }
-    Cell<T>* getCell(int row,int col){
-        Cell<T>* temp = head;
-        for(int i=0;i<row;i++)  temp = temp->down;
-        for(int i=0;i<col;i++)  temp = temp->right;
-        return temp;
-    }
     void setValue(string target,string t1,string t2){
         int row_1 =  target[0] - 'a';
         int col_1 = target[1] - '0';
@@ -43,9 +41,17 @@ public:
         int col_2 = t1[1] - '0';
         int row_3 = t2[0] - 'a';
         int col_3 = t2[1] - '0';
-        cout<<row_1<<" _ "<<col_1;
+        cout<<row_1<<" _ "<<col_1<<endl;
+        cout<<row_2<<" _ "<<col_2<<endl;
+        cout<<row_3<<" _ "<<col_3<<endl;
         setValue(row_1,col_1,row_2,col_2,row_3,col_3);
-    }    
+    }   
+
+    void recalculate(){
+        for(auto& i : dependTracker){
+             signOperator(i.r, i.t1, i.t2, i.op);
+        }
+    } 
     void setValue(int row_1,int col_1,int row_2,int col_2,int row_3,int col_3){
         Cell<T>* r = getCell(row_1,col_1);
         Cell<T>* t1 = getCell(row_2,col_2);
@@ -54,20 +60,8 @@ public:
             char op;
             cout<<"Enter sign (*,/,+,-) : ";
             cin>>op;
-            switch (op)
-            {
-            case '+' : r->value = t1->value + t2->value;    break;
-            case '-' : r->value = t1->value - t2->value;    break;
-            case '*' : r->value = t1->value * t2->value;    break;
-            case '/' : 
-                if(t2->value == 0){
-                    cout<<"Error Divide is not possible\n";
-                }
-                r->value = t1->value / t2->value;
-                break;
-            default:
-                cout << "Invalid operator entered.\n";
-            }
+            dependTracker.push_back({r, t1, t2, op});
+            signOperator(r,t1,t2,op);
         }
     }
     void setValue(int row, int col, T value) {
@@ -117,7 +111,6 @@ public:
         }
     }
 
-
     friend ostream& operator<<(ostream& os, const SpreadSheet& obj) {
         Cell<T>* row_ptr = obj.head;
         while (row_ptr != nullptr) {
@@ -144,6 +137,42 @@ public:
         }
     }
 
+private :
+        void signOperator(Cell<T>* r,Cell<T>* t1,Cell<T>* t2,char op){
+        switch (op)
+            {
+            case '+' : r->value = t1->value + t2->value;    break;
+            case '-' : r->value = t1->value - t2->value;    break;
+            case '*' : r->value = t1->value * t2->value;    break;
+            case '/' : 
+                if(t2->value == 0){
+                    cout<<"Error Divide is not possible\n";
+                    return;
+                }
+                else 
+                    r->value = t1->value / t2->value;
+                break;
+            default:
+                cout << "Invalid operator entered.\n";
+            }
+    }
+
+    Cell<T>* getCell(int row,int col){
+        Cell<T>* temp = head;
+        for(int i=0;i<row;i++)  temp = temp->down;
+        for(int i=0;i<col;i++)  temp = temp->right;
+        return temp;
+    }
+
 };
+
+template <typename T>
+struct dependency{
+    Cell<T>* r;
+    Cell<T>* t1;
+    Cell<T>* t2;
+    char op;
+};
+
 
 #endif

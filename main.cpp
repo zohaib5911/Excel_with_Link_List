@@ -20,7 +20,11 @@ int main(){
 
     // obj.setValue(1,1,3,3,4,4);
 
-    obj.setValue("a1","b3","d4");
+    obj.setValue("a0","d3","e4");
     cout<<endl<<obj<<endl;
+    obj.setValue(3,3,0);
+    obj.recalculate();
+    cout<<"\n--------------------\n";
+    cout<<obj;
     return 0;
 }
