@@ -1,73 +1,90 @@
-# Excel with Linked List
+📊 Mini Excel Spreadsheet using Linked List (C++)
+A simple C++ console-based spreadsheet system that mimics Excel functionalities using a 2D linked list data structure. Each cell supports integer values and basic arithmetic formulas.
 
-A simple spreadsheet application implemented in C++ using a linked list data structure for cell management. This project demonstrates how to build a basic Excel-like grid, support cell dependencies, and perform arithmetic operations between cells.
+🧠 Features
+Create a grid-based spreadsheet (default 5x5)
 
-## Features
+Set individual cell values
 
-- Dynamic 2D spreadsheet using linked cells (`Cell<T>`)
-- Set and get cell values by row and column
-- Display spreadsheet in a tabular format with row and column headers
-- Support for cell formulas (e.g., `A1=A2+A3`)
-- Dependency tracking and automatic recalculation of dependent cells
-- Safe memory management with a custom destructor
+Set cell values using formulas (e.g. A1 = B3 + C2)
 
-## How It Works
+Add rows and columns dynamically
 
-- Each cell is a node in a 2D linked list, with `right` and `down` pointers.
-- The spreadsheet supports setting values directly or via formulas.
-- Dependencies between cells are tracked, so when a referenced cell changes, all dependent cells are updated.
-- The spreadsheet can be displayed in a human-readable format.
+Insert values into entire row or column
 
-## Usage
+Empty entire row or column
 
-1. **Build the project**  
-   Compile with any C++ compiler:
-   ```
-   g++ main.cpp -o main
-   ```
+Recalculate dependent formula-based cells automatically
 
-2. **Run the program**
-   ```
-   ./main
-   ```
+Find:
 
-3. **Interact with the spreadsheet**
-   - Set values or formulas as prompted.
-   - View the spreadsheet after each operation.
+Row-wise Max/Min
 
-## Example
+Column-wise Max/Min
 
-```
-------- Spread Sheet -------
-        A       B       C       D       E
-0       0       0       0       0       0
-1       0       0       0       0       0
-2       0       0       0       0       0
-3       0       0       0       0       0
-4       0       0       0       0       0
+User-friendly CLI menu
 
-Set value
-Updating.......
+🔧 Technologies
+Language: C++
 
-------- Spread Sheet -------
-        A       B       C       D       E
-0       0       0       0       0       0
-1       0       0       0       0       0
-2       0       0       0       0       0
-3       0       0       0       33      0
-4       0       0       0       0       0
-```
+Compiler: g++ (MinGW or any C++14+ supported compiler)
 
-## File Structure
+📁 File Structure
+bash
+Copy
+Edit
+├── main.cpp             # Main user interface
+├── spreadSheet.h        # Spreadsheet class (template)
+├── cell.h               # Definition of the Cell<T> node
+🧪 Sample Formula
+You can set cell formulas like:
 
-- `main.cpp` — Entry point and user interaction
-- `spreadSheet.h` — Spreadsheet class and logic
-- `cell.h` — Cell node definition
+ini
+Copy
+Edit
+A1 = B3 + C2
+A2 = D3 * E4
+And the spreadsheet will:
 
-## Requirements
+Automatically evaluate the expression
 
-- C++11 or later
+Track dependencies
 
-## License
+Recalculate on value updates
 
-This project is licensed under
+🚀 How to Run
+Clone or Download this repository.
+
+Compile using any C++ compiler:
+
+bash
+Copy
+Edit
+g++ main.cpp -o sheet
+Run the executable:
+
+bash
+Copy
+Edit
+./sheet      # On Linux/Mac
+sheet.exe    # On Windows
+🎯 Demo Output
+mathematica
+Copy
+Edit
+=========== Mini Excel ===========
+1. Display Sheet
+2. Set Cell Value
+3. Set Cell Formula (A1=A2+A3)
+4. Add Row
+5. Add Column
+...
+Enter choice: 
+📌 Future Improvements
+Support for saving and loading sheets from files
+
+Add more formula complexity (e.g., nested formulas)
+
+GUI support using Qt or ImGui
+
+Sorting row or column based on values
