@@ -43,10 +43,11 @@ Enter choice:
 
 
 📌 Future Improvements
-Support for saving and loading sheets from files
-Add more formula complexity (e.g., nested formulas, parentheses)
-GUI support using Qt or ImGui
-Sorting row or column based on values
-Support for different data types (string, float, etc.)
-Undo/Redo functionality
-Import/Export to CSV or Excel formats
+
+- Support for saving and loading sheets from files
+- Add more formula complexity (e.g., nested formulas, parentheses)
+- GUI support using Qt or ImGui
+- Sorting row or column based on values
+- Support for different data types (string, float, etc.)
+- Undo/Redo functionality
+- Import/Export to CSVs
