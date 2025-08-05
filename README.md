@@ -1,4 +1,4 @@
-📊 Mini Excel Spreadsheet using Linked List (C++)
+📊 **Mini Excel Spreadsheet using Linked List (C++)**
 A simple C++ console-based spreadsheet system that mimics Excel functionalities using a 2D linked list data structure. Each cell supports integer values and basic arithmetic formulas.
 
 🧠 Features
